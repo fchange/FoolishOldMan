@@ -32,6 +32,7 @@
     <label for="name">name</label>
   </div>
   <button class="btn waves-effect waves-light" onclick="setName()">设置名字</button>
+  <button class="btn waves-effect waves-light" onclick="canIUseName()">我能用这名不</button>
 	
   <br>
   <button class="btn waves-effect waves-light" onclick="getState()">获取State</button>
@@ -45,7 +46,7 @@
   <script>
     "use strict";
 
-    var dappAddress = "n1t2M38wc9SRNJLVLegeBNMX7v37ZF7UvoE";
+    var dappAddress = "n1vkMWGWNw8Z2igZaYx11qZBDowayPZjCA7";
 
     var nebulas = require("nebulas"),
         Account = nebulas.Account,
@@ -62,10 +63,11 @@
       var callArgs = "";
       nebPay.simulateCall(to, value, callFunction, callArgs, {
           listener: function (resp) {
-              console.log("callback ==> " + JSON.stringify(resp))
+              console.log(resp)
           }
       })
     }
+    
     function setName () {
       var to = dappAddress;
       var value = "0";
@@ -77,6 +79,18 @@
           }
       })
     }
+    function canIUseName () {
+      var to = dappAddress;
+      var value = "0";
+      var callFunction = "canIUseName";
+      var callArgs = JSON.stringify([$('#name').val()]);
+      nebPay.simulateCall(to, value, callFunction, callArgs, {
+          listener: function (resp) {
+              console.log(resp)
+          }
+      })
+    }
+
     function dug () {
       var to = dappAddress;
       var value = "0";
