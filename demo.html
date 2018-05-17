@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>无聊的游戏</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.bootcss.com/materialize/1.0.0-rc.1/css/materialize.min.css" rel="stylesheet" media="screen,projection">
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+	<nav class="white" role="navigation">
+		<div class="nav-wrapper">
+			<a href="./demo.html" class="brand-logo" style="padding: 8px;"><img src="./logo.png" alt="Nebulas" style="width: 80%"></a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<!-- <li><a href="sass.html">Sass</a></li>
+				<li><a href="badges.html">组件</a></li> -->
+				<li><a class="waves-effect waves-light btn light-blue darken-1">作者博客</a></li>
+			</ul>
+		</div>
+	</nav>
+  
+  <div class="input-field">
+    <i class="material-icons prefix">mode_edit</i>
+    <textarea id="TX" class="materialize-textarea"></textarea>
+    <label for="TX">合约地址</label>
+  </div>
+  <button class="btn waves-effect waves-light" onclick="setTxAddress()">设置合约地址</button>
+
+  <div class="input-field">
+    <i class="material-icons prefix">mode_edit</i>
+    <textarea id="name" class="materialize-textarea" value="AAAA"></textarea>
+    <label for="name">name</label>
+  </div>
+  <button class="btn waves-effect waves-light" onclick="setName()">设置名字</button>
+	
+  <br>
+  <button class="btn waves-effect waves-light" onclick="getState()">获取State</button>
+  <br>
+  <button class="btn waves-effect waves-light" onclick="dug()">挖</button>
+
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/materialize/1.0.0-rc.1/js/materialize.min.js"></script>
+  <script src="./nebPay.js"></script>
+  <script src="./nebulas.js"></script>
+  <script>
+    "use strict";
+
+    var dappAddress = "n1t2M38wc9SRNJLVLegeBNMX7v37ZF7UvoE";
+
+    var nebulas = require("nebulas"),
+        Account = nebulas.Account,
+        neb = new nebulas.Neb();
+    neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+
+    var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
+    var nebPay = new NebPay();
+
+    function getState() {
+      var to = dappAddress;
+      var value = "0";
+      var callFunction = "getState";
+      var callArgs = "";
+      nebPay.simulateCall(to, value, callFunction, callArgs, {
+          listener: function (resp) {
+              console.log("callback ==> " + JSON.stringify(resp))
+          }
+      })
+    }
+    function setName () {
+      var to = dappAddress;
+      var value = "0";
+      var callFunction = "setName";
+      var callArgs = JSON.stringify([$('#name').val()]);
+      nebPay.call(to, value, callFunction, callArgs, {
+          listener: function (resp) {
+              console.log("callback ==> " + JSON.stringify(resp))
+          }
+      })
+    }
+    function dug () {
+      var to = dappAddress;
+      var value = "0";
+      var callFunction = "dug";
+      var callArgs = '[]';
+      nebPay.call(to, value, callFunction, callArgs, {
+          listener: function (resp) {
+              console.log("callback ==> " + JSON.stringify(resp))
+          }
+      })
+    }
+  </script>
+</body>
+</html>
